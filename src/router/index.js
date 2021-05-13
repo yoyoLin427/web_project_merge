@@ -27,10 +27,12 @@ export default new Router({
   routes: [
     {
       path: '/profile',
+      name: 'profile',
       component: profile
     },
     {
       path: '/reservation',
+      name: 'reservation',
       component: reservation
     },
     {

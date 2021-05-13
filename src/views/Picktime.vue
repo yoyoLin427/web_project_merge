@@ -479,7 +479,7 @@ export default {
 .availabletime {
   display: inline-block;
   overflow-wrap: normal;
-  padding: 10px 25px;
+  padding: 10px ;
   flex-grow: 0;
   flex-shrink: 0;
   margin-top: 15px;
