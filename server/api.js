@@ -239,10 +239,10 @@ module.exports = {
 
     login(req, res, next) {
 
-        var id = req.body.id;
+        var id = req.body.ID;
         var password = req.body.password;
         pool.getConnection((err, connection) => {
-            var sql = sqlMap.login;
+            var sql = "select * from users where id=?"
             connection.query(sql, [id], (err, result) => {
 
                 if (result.length == 0) {
@@ -261,13 +261,34 @@ module.exports = {
         })
     },
     register(req, res, next) {
-        var id = req.body.id;
+       
+        var id = req.body.ID;
         var password = req.body.password;
+        var name = req.body.name;
+
+        var sql_add = "insert into users(`id`,`password`,`name`) values(?,?,?)"
+        var sql_checkID = "select * from users where id=?"
+
         pool.getConnection((err, connection) => {
-            var sql = sqlMap.register;
-            connection.query(sql, [id, password], (err, result) => {
+
+            connection.query(sql_checkID, [id],(err, result) => {
+                if (err) throw err;
+                if (result.length == 0) {
+                    //帳號沒有人用過
+                    connection.query(sql_add, [id,password,name],(err, result) => {
+                        if (err) throw err;
+                        res.send("success")
+                        
+                    });
+                }
+                else{
+                    //帳號已有人用過
+                    res.send("fail")
+                }
                 connection.release();
-            })
+            });
+
+            
         })
     },
     book(req, res, next) {

@@ -17,7 +17,12 @@ import Otherresource from '@/views/Otherresource.vue'
 
 /* 新增 */
 import Press from '@/yo_0512/Press.vue'
-import PressQ1 from '@/yo_0512/PressQ1.vue'
+import Register from '@/views/Register.vue'
+import Login from '@/views/Login.vue'
+
+/* 新增 0607 anson*/
+import Press2 from '@/views/Press.vue'
+import PressResult from '@/views/PressResult.vue'
 
 Vue.use(Router)
 
@@ -68,7 +73,8 @@ export default new Router({
     },
     {
       path: '/home',
-      component: Home
+      component: Home,
+      name:'home'
     },
     {
       path: '/reserve',
@@ -93,9 +99,24 @@ export default new Router({
       component: Press
     },
     {
-      path: '/press/q1',
-      name: 'PressQ1',
-      component: PressQ1
-    }
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/Press2',
+      name: 'Press2',
+      component: Press2
+    },
+    {
+      path: '/Press/Result',
+      name: 'PressResult',
+      component: PressResult
+    },
   ]
 })

@@ -5,7 +5,7 @@
         <div class="background">
             <img  style="padding-top:90px" src="@/yo_0512/press_img.svg">
             <div class="text">本量表所列舉的問題是為協助您瞭解您的身心適應狀況，請您仔細回想在最近一星期中(包括今天)，這些問題使您感到困擾或苦惱的程度，然後圈選一個您認為最能代表您感覺的答案。 </div>
-            <router-link to="/press/q1">
+            <router-link to="/Press2">
                 <img  style="padding-top:30px" src="@/yo_0512/press_btn_start.svg">
             </router-link>
             <img  style="padding-top:5px" src="@/yo_0512/press_btn_history.svg">
