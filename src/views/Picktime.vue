@@ -1,7 +1,7 @@
 <template>
   <div class="desktop" :class="{ darken: seen }">
     <div id="namebar">
-      <Nav showBackArrow showText navText="挑選日期與時間" />
+      <Nav showBackArrow showText navText="挑選日期與時間" destination="analysis" />
     </div>
     <div id="pickbar">
       <div id="innerpickbar">
@@ -63,18 +63,21 @@
       下一步
       </div>
     </div>
-    <div class="Description" v-if="seen">
-      <div id="photo" :style="description.photostyle"></div>
-      <div id="maxim">{{ description.maximtext }}</div>
-      <button type="button" id="closebtn" @click="closedescription"></button>
-      <div class="contenttitle" id="gender">性別</div>
-      <div class="contenttitle" id="expert">擅長議題</div>
-      <div class="contenttitle" id="talkstyle">諮商風格</div>
-      <div class="content" id="genderc">{{ description.gendercontent }}</div>
-      <div class="content" id="expertc">{{ description.expertcontent }}</div>
-      <div class="content" id="talkstylec">
-        {{ description.talkstylecontent }}
+    <transition name="descript">
+      <div class="Description" v-if="seen">
+        <div id="photo" :style="description.photostyle"></div>
+        <div id="maxim">{{ description.maximtext }}</div>
+        <button type="button" id="closebtn" @click="closedescription"></button>
+        <div class="contenttitle" id="gender">性別</div>
+        <div class="contenttitle" id="expert">擅長議題</div>
+        <div class="contenttitle" id="talkstyle">諮商風格</div>
+        <div class="content" id="genderc">{{ description.gendercontent }}</div>
+        <div class="content" id="expertc">{{ description.expertcontent }}</div>
+        <div class="content" id="talkstylec">
+          {{ description.talkstylecontent }}
+        </div>
       </div>
+    </transition>
     </div>
   </div>
 </template>
@@ -109,43 +112,7 @@ export default {
       seen: false,
       nextavailable: false,
       picktimeisactive: false,
-      expert: [{
-          photo: {
-            backgroundImage: "url(" + require("@/assets/Tim/expert1.svg") +")",
-          },
-          name: "許欣宜",
-          isActive: false,
-          id: 2,
-        }, {
-          photo: {
-            backgroundImage: "url(" + require("@/assets/Tim/expert2.svg") +")",
-          },
-          name: "林宜華",
-          isActive: false,
-          id: 3,
-        }, {
-          photo: {
-            backgroundImage: "url(" + require("@/assets/Tim/expert3.svg") +")",
-          },
-          name: "陳以玟",
-          isActive: false,
-          id: 4,
-        }, {
-          photo: {
-            backgroundImage: "url(" + require("@/assets/Tim/expert4.svg") +")",
-          },
-          name: "王浩偉",
-          isActive: false,
-          id: 5,
-        }, {
-          photo: {
-            backgroundImage: "url(" + require("@/assets/Tim/expert5.svg") +")",
-          },
-          name: "陳俊宇",
-          isActive: false,
-          id: 6,
-        }
-      ],
+      expert: [],
       description: {
         photostyle: {
           backgroundImage: "url(" + require("@/assets/svg/photo.svg") +")",
@@ -188,6 +155,9 @@ export default {
         }
       }      
     },
+    pickval: function(val, oldVal){
+      this.dateselect = '';
+    }
   },
   methods: {
     setavailabledatelist() {
@@ -195,12 +165,12 @@ export default {
         for(var j = 0; j < 5; j++)
         {
           var y = "2021";
-          var m = "05";
+          var m = "06";
           var d = String(Math.floor(Math.random() * (30 - 1 + 1)) + 10);
           var ymd = [y, m, d];
           this.availabledatelist[this.namelist[i]].push(ymd.join('-'));
         }
-        this.availabledatelist[this.namelist[i]].push("2021-05-21");
+        this.availabledatelist[this.namelist[i]].push("2021-06-21");
       }
     },
     setselect(si) {
@@ -225,7 +195,6 @@ export default {
       this.pickbarscroll(1);
       this.pickval = 1;
       this.reservationselect.personselect = "";
-      this.dateselect = '';
     },
     clickphoto(id) {
       this.picktimeisactive = false;
@@ -241,7 +210,6 @@ export default {
       this.seen = true;
       this.pickbarscroll(id);
       this.pickval = id;
-      this.dateselect = '';
     },
     clickSrollLeft(Id, pos) {
       var timer;
@@ -289,6 +257,11 @@ export default {
     dateClass(ymd, date) {
         return ['table-primary', 'border-0', 'rounded-circle'];
     },
+    getexpertsort() {
+      this.$route.params.expert.forEach(i => {
+        this.expert.push(i);
+      });
+    },
     getpickid() {
       var pickid = this.$route.params.pickid;
       if(pickid === 1)
@@ -331,6 +304,7 @@ export default {
     }
   },
   created() {
+    this.getexpertsort();
     this.setavailabledatelist();
   },
   mounted() {
@@ -452,6 +426,13 @@ export default {
   position: relative;
   width: 375px;
   height: 290px;
+}
+.descript-enter-active,.descript-leave-active {
+  transition: all .8s ease;
+}
+.descript-enter, .descript-leave-to{
+  transform: translateY(-15px);
+  opacity: 0;
 }
 #describe {
   position: absolute;

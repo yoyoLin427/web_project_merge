@@ -133,7 +133,7 @@ import Nav from '@/components/Nav.vue'
 import Footer from '@/components/Footer.vue'
 
 export default {
-    name: 'Feeling',
+    name: 'analysis',
     components:{
         Nav,
         Footer
@@ -156,6 +156,7 @@ export default {
 			p14: 0,
 			p15: 0,
 			p16: 0,
+			result: [],
 		};
 	},
 	methods: {
@@ -320,7 +321,55 @@ export default {
 			}
 		},
 		pagechange: function(){
-			this.$router.push("/Matchresult");
+			if(this.p1 == 1) {
+				this.result.push("生涯規劃");
+			}
+			if(this.p2 == 1) {
+				this.result.push("家庭狀況");
+			}
+			if(this.p3 == 1) {
+				this.result.push("自我探索");
+			}
+			if(this.p4 == 1) {
+				this.result.push("感情議題");
+			}
+			if(this.p5 == 1) {
+				this.result.push("生活變故");
+			}
+			if(this.p6 == 1) {
+				this.result.push("情緒低落");
+			}
+			if(this.p7 == 1) {
+				this.result.push("性別議題");
+			}
+			if(this.p8 == 1) {
+				this.result.push("人際相處");
+			}
+			if(this.p9 == 1) {
+				this.result.push("睡眠問題");
+			}
+			if(this.p10 == 1) {
+				this.result.push("其他");
+			}
+			if(this.p11 == 1) {
+				this.result.push("不拘");
+			}
+			if(this.p12 == 1) {
+				this.result.push("男");
+			}
+			if(this.p13 == 1) {
+				this.result.push("女");
+			}
+			if(this.p14 == 1) {
+				this.result.push("想被溫柔安慰");
+			}
+			if(this.p15 == 1) {
+				this.result.push("想聽客觀的視角分析");
+			}
+			if(this.p16 == 1) {
+				this.result.push("想被溫和的罵醒");
+			}
+			this.$router.push({name: "Matchresult", params: {result: this.result}});
 		}
 	},
 }

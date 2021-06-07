@@ -42,9 +42,145 @@ export default {
         Nav,
         Footer
     },
+	data() {
+		return {
+			expert: [
+				{
+					photo: 
+					{
+						backgroundImage: "url(" + require("@/assets/Tim/expert1.svg") +")",
+					},
+					name: "許欣宜",
+					isActive: false,
+					id: 2,
+					score: 0,
+					"生涯規劃": 0,
+					"家庭狀況": 0,
+					"自我探索": 1,
+					"感情議題": 1,
+					"生活變故": 0,
+					"情緒低落": 1,
+					"性別議題": 0,
+					"人際相處": 0,
+					"睡眠問題": 0,
+					"其他": 1,
+					"不拘": 1,
+					"男": 0,
+					"女": 1,
+					"想被溫柔安慰": 1,
+					"想聽客觀的視角分析": 0,
+					"想被溫和的罵醒": 1,
+				}, 
+				{
+					photo: 
+					{
+						backgroundImage: "url(" + require("@/assets/Tim/expert2.svg") +")",
+					},
+					name: "林宜華",
+					isActive: false,
+					id: 3,
+					score: 0,
+					"生涯規劃": 0,
+					"家庭狀況": 0,
+					"自我探索": 1,
+					"感情議題": 0,
+					"生活變故": 0,
+					"情緒低落": 1,
+					"性別議題": 1,
+					"人際相處": 0,
+					"睡眠問題": 0,
+					"其他": 1,
+					"不拘": 1,
+					"男": 0,
+					"女": 1,
+					"想被溫柔安慰": 1,
+					"想聽客觀的視角分析": 1,
+					"想被溫和的罵醒": 0,
+				}, 
+				{
+					photo: 
+					{
+						backgroundImage: "url(" + require("@/assets/Tim/expert3.svg") +")",
+					},
+					name: "陳以玟",
+					isActive: false,
+					id: 4,
+					score: 0,
+					"生涯規劃": 0,
+					"家庭狀況": 1,
+					"自我探索": 0,
+					"感情議題": 0,
+					"生活變故": 0,
+					"情緒低落": 1,
+					"性別議題": 0,
+					"人際相處": 0,
+					"睡眠問題": 1,
+					"其他": 1,
+					"不拘": 1,
+					"男": 0,
+					"女": 1,
+					"想被溫柔安慰": 1,
+					"想聽客觀的視角分析": 1,
+					"想被溫和的罵醒": 0,
+				}, 
+				{
+					photo: 
+					{
+						backgroundImage: "url(" + require("@/assets/Tim/expert4.svg") +")",
+					},
+					name: "王浩偉",
+					isActive: false,
+					id: 5,
+					score: 0,
+					"生涯規劃": 0,
+					"家庭狀況": 0,
+					"自我探索": 0,
+					"感情議題": 1,
+					"生活變故": 0,
+					"情緒低落": 1,
+					"性別議題": 0,
+					"人際相處": 1,
+					"睡眠問題": 0,
+					"其他": 1,
+					"不拘": 1,
+					"男": 1,
+					"女": 0,
+					"想被溫柔安慰": 0,
+					"想聽客觀的視角分析": 1,
+					"想被溫和的罵醒": 0,
+				}, 
+				{
+					photo: 
+					{
+						backgroundImage: "url(" + require("@/assets/Tim/expert5.svg") +")",
+					},
+					name: "陳俊宇",
+					isActive: false,
+					id: 6,
+					score: 0,
+					"生涯規劃": 1,
+					"家庭狀況": 0,
+					"自我探索": 0,
+					"感情議題": 0,
+					"生活變故": 1,
+					"情緒低落": 1,
+					"性別議題": 0,
+					"人際相處": 0,
+					"睡眠問題": 0,
+					"其他": 1,
+					"不拘": 1,
+					"男": 1,
+					"女": 0,
+					"想被溫柔安慰": 0,
+					"想聽客觀的視角分析": 1,
+					"想被溫和的罵醒": 1,
+				}
+			],
+		};
+	},
 	methods: {
 		pagechange() {
-			this.$router.push({name:'Picktime', params:{pickid: 1}});
+			this.$router.push({name: 'Picktime', params: { pickid: 1, expert: this.expert}});
 		}
 	}
 }

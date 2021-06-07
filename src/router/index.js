@@ -86,6 +86,7 @@ export default new Router({
     },
     {
       path: '/analysis',
+      name: 'analysis',
       component: analysis
     },
     {
