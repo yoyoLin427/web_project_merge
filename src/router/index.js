@@ -24,6 +24,9 @@ import Login from '@/views/Login.vue'
 import Press2 from '@/views/Press.vue'
 import PressResult from '@/views/PressResult.vue'
 
+/* 新增yoyo 0619 */
+import MoodTree from '@/views/MoodTreeMain.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -118,6 +121,11 @@ export default new Router({
       path: '/Press/Result',
       name: 'PressResult',
       component: PressResult
+    },
+    {
+      path: '/mood',
+      name: 'MoodTree',
+      component: MoodTree
     },
   ]
 })

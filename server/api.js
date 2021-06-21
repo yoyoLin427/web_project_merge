@@ -242,7 +242,7 @@ module.exports = {
         var id = req.body.ID;
         var password = req.body.password;
         pool.getConnection((err, connection) => {
-            var sql = "select * from users where id=?"
+            var sql = "select * from user where id=?"
             connection.query(sql, [id], (err, result) => {
 
                 if (result.length == 0) {
@@ -266,8 +266,8 @@ module.exports = {
         var password = req.body.password;
         var name = req.body.name;
 
-        var sql_add = "insert into users(`id`,`password`,`name`) values(?,?,?)"
-        var sql_checkID = "select * from users where id=?"
+        var sql_add = "insert into user(`id`,`password`,`name`) values(?,?,?)"
+        var sql_checkID = "select * from user where id=?"
 
         pool.getConnection((err, connection) => {
 
@@ -319,5 +319,49 @@ module.exports = {
             })
         }
         
+    },
+
+
+    /* yoyo */
+    writeDiary(req, res, next) {
+       
+        var sql_add = "INSERT INTO `diary` (`user_id`, `eventname`, `date`, `time`, `category`, `mood`, `course`, `diaryresult`, `ispublic`, `additional`, `number`, `hug`, `comment`, `comment_notRead`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+
+        var id = req.body.id
+        var name = req.body.name
+        var category = req.body.category
+        var emoji = req.body.emoji
+        var date = req.body.date
+        var text1 = req.body.text1
+        var text2 = req.body.text1
+        var time = req.body.time
+        var isPublic = req.body.isPublic
+        var addtext = req.body.addtext
+        var number = req.body.number
+
+        pool.getConnection((err, connection) => {
+            connection.query(sql_add, [id,name,date,time,category,emoji,text1,text2,isPublic,addtext,number,0,0,'n'],(err, result) => {
+                if (err) throw err;
+                res.send("success");
+                connection.release();
+            });
+            
+        })
+    },
+    checkDiaryDate(req, res, next) {
+       
+        var sql = "SELECT DISTINCT date FROM `diary` WHERE user_id=?";
+
+        var id = req.body.id
+
+
+        pool.getConnection((err, connection) => {
+            connection.query(sql, id,(err, result) => {
+                if (err) throw err;
+                res.send(result);
+                connection.release();
+            });
+            
+        })
     },
 }

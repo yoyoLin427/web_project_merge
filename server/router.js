@@ -14,4 +14,12 @@ router.post('/book', (req, res, next) => {
     api.book(req, res, next);
 });
 
+/* yoyo */
+router.post('/writeDiary', (req, res, next) => {
+    api.writeDiary(req, res, next);
+});
+
+router.post('/checkDiaryDate', (req, res, next) => {
+    api.checkDiaryDate(req, res, next);
+});
 module.exports = router;

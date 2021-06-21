@@ -23,7 +23,7 @@
                     </router-link> 
                 </b-col>
                 <b-col class="text-center">
-                    <router-link to="/feeling">
+                    <router-link to="/mood">
                         <img  v-if="showMood" class="iconimg" src="@/assets/svg/moodA.svg">
                         <img  v-else class="iconimg" src="@/assets/svg/mood.svg">
                         <div v-if="showMood" class="icontext iconActivetext">心情紀錄</div>
