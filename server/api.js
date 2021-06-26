@@ -350,7 +350,7 @@ module.exports = {
     },
     checkDiaryDate(req, res, next) {
        
-        var sql = "SELECT DISTINCT date FROM `diary` WHERE user_id=?";
+        var sql = "SELECT DISTINCT date,mood FROM `diary` WHERE user_id=?";
 
         var id = req.body.id
 

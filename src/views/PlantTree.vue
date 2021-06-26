@@ -4,7 +4,8 @@
             <b-container >
                 <b-row style="padding-top:10px;">
                     <b-col style="text-align:center;" > 
-                        <img  @click="lastmonth" ref="Larrow" src="@/yo_0613/tree_arrow.svg">
+                        <img  v-if="haveMay==false" class="disable_arrow" src="@/yo_0613/tree_arrow.svg">
+                        <img  v-if="haveMay" @click="lastmonth" ref="Larrow" src="@/yo_0613/tree_arrow.svg">
                     </b-col>
                     <b-col cols="6" style="text-align:center;"> 
                         <div class="choose_month">{{month}}月/ 2021</div>
@@ -24,7 +25,7 @@
 
 
         </div>
-        <div style="padding:12px;margin-top:3px;">
+        <div style="padding:12px;margin-top:5px;">
             <b-container >
                 <b-row>
                     <b-col style="padding:0px;text-align:center;" > 
@@ -69,15 +70,45 @@ export default {
   data() {
     return {
       month : 6,
-      isWaterClass: "iswater"
+      isWaterClass: "iswater",
+      ID:"",
+      haveMay : false,
     };
   },
+  created () {
+
+        /* 記得改學號 */
+        this.ID = "F74064046"
+
+        /* 確認有哪些天有寫日記,是否要顯示5月樹,現在只有兩種樹 */
+        this.$http
+        .post("/api/checkDiaryDate", {
+            id : this.ID,
+        })
+        .then((res) => {
+            var i;
+            for(i=0;i<res.body.length;i++){
+                //console.log(res.body[i].date)
+                if(res.body[i].date.indexOf('2021-05')!=-1){
+                    this.haveMay = true;
+                }
+            }
+            
+                
+        });
+
+
+        
+    },
   methods:{
       lastmonth:function(){
+          if(this.haveMay){
             this.$refs.Larrow.classList.add("disable_arrow");
             this.$refs.Rarrow.classList.remove("disable_arrow");
             this.month = 5;
             this.isWaterClass = "nowater"
+          }
+            
       },
       nextmonth:function(){
             this.$refs.Rarrow.classList.add("disable_arrow");

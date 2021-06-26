@@ -663,38 +663,31 @@ export default {
 
             if(name =="")
             {
-                console.log("沒寫事件名稱")
+                //console.log("沒寫事件名稱")
                 this.dismissCountDown = this.dismissSecs
             }
             else if(category=="")
             {
-                console.log("沒選類別")
+                //console.log("沒選類別")
                 this.dismissCountDown = this.dismissSecs
             }
             else if(emoji == null)
             {
-                console.log("沒選表情")
+                //console.log("沒選表情")
                 this.dismissCountDown = this.dismissSecs
             }
             else if(text1 == "")
             {
-                console.log("沒寫過程")
+                //console.log("沒寫過程")
                 this.dismissCountDown = this.dismissSecs
             }
             else if(text2 == "")
             {
-                console.log("沒寫結果")
+                //console.log("沒寫結果")
                 this.dismissCountDown = this.dismissSecs
             }
             else{/* 完整填寫日記 */
-                console.log(id)
-                console.log(name)
-                console.log(category)
-                console.log(emoji)
-                console.log(text1)
-                console.log(text2)
-                console.log(date)
-                console.log(time)
+                
 
                 this.$http
                 .post("/api/writeDiary", {
@@ -713,7 +706,7 @@ export default {
                 
                 })
                 .then((res) => {
-                    console.log("已將日記成功輸入資料庫")
+                    //console.log("已將日記成功輸入資料庫")
                     this.$router.push({
                         name: 'MoodTree', 
                         
@@ -749,7 +742,7 @@ export default {
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
         //拼装完整日期格式
         this.today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-        console.log(this.today)
+        //console.log(this.today)
 
 
         /* 記得改anoymous_no 匿名樹友的號碼,設計師說每個人都是固定一個號碼,但這裡先隨機 */
