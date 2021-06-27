@@ -386,7 +386,7 @@ a{
 }
 /* 隱藏原本的icon */
 .form-date__input[type="date"]::-webkit-calendar-picker-indicator {
-		width: 170px;
+		width: 0px;
 		height: 100%;
 		position: absolute;
 		top: 0;
