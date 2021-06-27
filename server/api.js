@@ -333,11 +333,13 @@ module.exports = {
         var emoji = req.body.emoji
         var date = req.body.date
         var text1 = req.body.text1
-        var text2 = req.body.text1
+        var text2 = req.body.text2
         var time = req.body.time
         var isPublic = req.body.isPublic
         var addtext = req.body.addtext
         var number = req.body.number
+        console.log(text2)
+        console.log(text1)
 
         pool.getConnection((err, connection) => {
             connection.query(sql_add, [id,name,date,time,category,emoji,text1,text2,isPublic,addtext,number,0,0,'n'],(err, result) => {

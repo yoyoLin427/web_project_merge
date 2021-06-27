@@ -145,8 +145,8 @@
                         </b-row>
                         <b-row style="padding-top:10px;">
                             <b-col  align-self="start" cols="3" style="padding-top:0px;text-align:top;" > 
-                                <img  v-if="MayMood[n].indexOf('開心')!=-1 " class="mood" src="@/yo_0613/Aicons_face-happy.svg">
-                                <img  v-if="MayMood[n].indexOf('小確幸')!=-1 " class="mood" src="@/yo_0613/Aicons_face-very-happy.svg">
+                                <img  v-if="MayMood[n].indexOf('小確幸')!=-1 " class="mood" src="@/yo_0613/Aicons_face-happy.svg">
+                                <img  v-if="MayMood[n].indexOf('開心')!=-1 " class="mood" src="@/yo_0613/Aicons_face-very-happy.svg">
                                 <img  v-if="MayMood[n].indexOf('平靜')!=-1 " class="mood" src="@/yo_0613/Aicons_face-neutral.svg">
                                 <img  v-if="MayMood[n].indexOf('有點糟')!=-1 " class="mood" src="@/yo_0613/Aicons_face-sad.svg">
                                 <img  v-if="MayMood[n].indexOf('好難過')!=-1 " class="mood" src="@/yo_0613/Aicons_face-very-sad.svg">
@@ -220,7 +220,6 @@
 }
 .diarybox{
     position: relative;
-    margin-top: 5px;
     margin-left:24px;
     width: 327px;
     height: auto;
@@ -231,6 +230,8 @@
     box-sizing: border-box;
     border-radius: 10px;
     padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 .veryhappylong{
     height: 8px;
