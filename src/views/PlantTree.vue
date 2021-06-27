@@ -30,18 +30,22 @@
             <b-container >
                 <b-row>
                     <b-col style="padding:0px;text-align:center;" > 
-                        <img   src="@/yo_0613/tree_history.svg">
-                        <div class="btn_text">歷史紀錄</div>
+                        <div @click="btnHistory">
+                            <img   src="@/yo_0613/tree_history.svg">
+                            <div class="btn_text">歷史紀錄</div>
+                        </div>
                     </b-col>
                     <b-col style="padding:0px;text-align:center;" > 
-                        <img   src="@/yo_0613/tree_exchange.svg">
-                        <div class="btn_text">兌換樹種</div>
+                        <div @click="btnExchange">
+                            <img   src="@/yo_0613/tree_exchange.svg">
+                            <div class="btn_text">兌換樹種</div>
+                        </div>
                     </b-col>
                     <b-col style="padding:0px;text-align:center;" > 
-                        <router-link to="/diary/write">
+                        <div @click="btnWriteDiary">
                             <img   src="@/yo_0613/tree_add.svg">
                             <div class="btn_text">新增日記</div>
-                        </router-link>
+                        </div>
                     </b-col>
                     <b-col style="padding:0px;text-align:center;" > 
                         <div @click="btnWatering">
@@ -50,8 +54,10 @@
                         </div>
                     </b-col>
                     <b-col style="padding:0px;text-align:center;" > 
-                        <img   src="@/yo_0613/tree_Q.svg">
-                        <div class="btn_text">使用說明</div>
+                        <div @click="btnQA">
+                            <img   src="@/yo_0613/tree_Q.svg">
+                            <div class="btn_text">使用說明</div>
+                        </div>
                     </b-col>
                     
                     
@@ -260,6 +266,34 @@ export default {
                 this.isWaterClass = "nowater"
             }
             
+        },
+        btnWriteDiary:function(){
+            this.$router.push({
+                name: 'DiaryWrite', 
+                        
+            });
+
+        },
+        btnExchange:function(){
+            this.$router.push({
+                name: 'Tree_exchange', 
+                        
+            });
+
+        },
+        btnHistory:function(){
+            this.$router.push({
+                name: 'TreeHistory', 
+                        
+            });
+
+        },
+        btnQA:function(){
+            this.$router.push({
+                name: 'MoodQA', 
+                        
+            });
+
         }
     },
    

@@ -30,4 +30,8 @@ router.post('/checkWatering', (req, res, next) => {
 router.post('/addWater', (req, res, next) => {
     api.addWater(req, res, next);
 });
+
+router.post('/getPoint', (req, res, next) => {
+    api.getPoint(req, res, next);
+});
 module.exports = router;

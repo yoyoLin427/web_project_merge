@@ -77,9 +77,9 @@
                         <div class="btn_submit" @click="showIFtreeHole" >送出</div>
                     </b-col>
                     <b-col>
-                        <router-link to="/feeling">
-                            <div class="btn_cancel" @click="backMood">取消</div>
-                        </router-link>
+
+                        <div class="btn_cancel" @click="backMood">取消</div>
+
                     </b-col>
                         
                 </b-row>
@@ -386,7 +386,7 @@ a{
 }
 /* 隱藏原本的icon */
 .form-date__input[type="date"]::-webkit-calendar-picker-indicator {
-		width: 118px;
+		width: 170px;
 		height: 100%;
 		position: absolute;
 		top: 0;
@@ -579,7 +579,7 @@ input[type="radio"] {
 import Nav from '@/components/Nav.vue'
 
 export default {
-    name: 'Feeling',
+    name: 'DiaryWrite',
     methods: {
         showIFtreeHole:function(){
             

@@ -350,7 +350,7 @@ module.exports = {
     },
     checkDiaryDate(req, res, next) {
        
-        var sql = "SELECT DISTINCT date,mood FROM `diary` WHERE user_id=?";
+        var sql = "SELECT * FROM `diary` WHERE user_id=?";
 
         var id = req.body.id
 
@@ -395,6 +395,37 @@ module.exports = {
             var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
             connection.query(sql, [today,id],(err, result) => {
                 if (err) throw err;
+                connection.release();
+            });
+            
+        })
+    },
+    getPoint(req, res, next) {
+
+        var id = req.body.id
+
+        //先確認有沒有這個帳號
+        var sql1 = "SELECT * FROM `point_yoyo` WHERE id=?;"
+        //如果沒有帳號就insert
+        var sql2 = "INSERT into point_yoyo(ID,points) values(?,?)"
+        
+
+        pool.getConnection((err, connection) => {
+            
+            connection.query(sql1, [id],(err, result) => {
+                if (err) throw err;
+                if(result.length == 0)//還沒登入過
+                {
+                    console.log("初次登記,點數為0")
+                    connection.query(sql2, [id,0],(err, result) => {
+                        if (err) throw err;
+                        res.send("first");
+                        
+                    });
+                }
+                else{
+                    res.send(result);
+                }
                 connection.release();
             });
             

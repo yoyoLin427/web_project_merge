@@ -24,8 +24,11 @@ import Login from '@/views/Login.vue'
 import Press2 from '@/views/Press.vue'
 import PressResult from '@/views/PressResult.vue'
 
-/* 新增yoyo 0619 */
+/* 新增yoyo*/
 import MoodTree from '@/views/MoodTreeMain.vue'
+import Tree_exchange from '@/views/Tree_exchange.vue'
+import TreeHistory from '@/views/TreeHistory.vue'
+import MoodQA from '@/views/MoodQA.vue'
 
 Vue.use(Router)
 
@@ -69,10 +72,6 @@ export default new Router({
     {
       path: '/diary',
       component: DiaryMain
-    },
-    {
-      path: '/diary/write',
-      component: DiaryWrite
     },
     {
       path: '/home',
@@ -126,6 +125,26 @@ export default new Router({
       path: '/mood',
       name: 'MoodTree',
       component: MoodTree
+    },
+    {
+      path: '/tree_exchange',
+      name: 'Tree_exchange',
+      component: Tree_exchange
+    },
+    {
+      path: '/diary/write',
+      name:'DiaryWrite',
+      component: DiaryWrite
+    },
+    {
+      path: '/tree_history',
+      name:'TreeHistory',
+      component: TreeHistory
+    },
+    {
+      path: '/mood_QA',
+      name:'MoodQA',
+      component: MoodQA
     },
   ]
 })
