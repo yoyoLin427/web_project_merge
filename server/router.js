@@ -22,4 +22,12 @@ router.post('/writeDiary', (req, res, next) => {
 router.post('/checkDiaryDate', (req, res, next) => {
     api.checkDiaryDate(req, res, next);
 });
+
+router.post('/checkWatering', (req, res, next) => {
+    api.checkWatering(req, res, next);
+});
+
+router.post('/addWater', (req, res, next) => {
+    api.addWater(req, res, next);
+});
 module.exports = router;

@@ -1,4 +1,5 @@
 <template>
+    
     <div style="width: 327px;height: 378px;position: relative;border-radius: 6px;overflow:hidden">
         <img  id="cloud1" src="@/yo_0613/tree_cloud1.svg">
         <img  id="cloud2" src="@/yo_0613/tree_cloud2.svg">
@@ -12,9 +13,18 @@
         <!--葉子-->
         <div  ref="leaf" class="leaf" v-for="n in 31" :key='n'>{{ n }}</div>
 
+        <div ref="newleaf"></div>
+
         <!--鳥-->
         <div  v-if="bluebird==true" class="blue_bird">test</div>
         <div  v-if="orangebird==true" class="orange_bird">test</div>
+
+        <!--澆水-->
+        <img ref="watercan" id="watercan" src="@/yo_0622/watercan.svg" />
+        <img ref="drop1" id="drop1" src="@/assets/svg/plant_drop.svg" />
+        <img ref="drop2" id="drop2" src="@/assets/svg/plant_drop.svg" />
+        <img ref="drop3" id="drop3" src="@/assets/svg/plant_drop.svg" />
+        <img ref="drop4" id="drop4" src="@/assets/svg/plant_drop.svg" />
     </div>
 
   
@@ -27,12 +37,73 @@ name: 'JuneTree',
         return {
             ID:"",
             bluebird:false,
-            orangebird:false,
             
         };
     },
-    methods:{
-        
+    props: {
+      todayLeaf: Boolean,
+      orangebird: Boolean,
+      required: true
+    },
+    watch:{
+        todayLeaf: function(){
+            if(this.todayLeaf){
+                this.todayLeaf = false;
+                console.log("澆水囉囉")
+                this.$refs.watercan.classList.add("watercan");
+                this.$refs.drop1.classList.add("drop1");
+                this.$refs.drop2.classList.add("drop2");
+                this.$refs.drop3.classList.add("drop3");
+                this.$refs.drop4.classList.add("drop4");
+                this.$http
+                .post("/api/checkDiaryDate", {
+                    id : this.ID,
+                })
+                .then((res) => {
+                    var i;
+                    var day;
+                    var now = new Date();
+                    var day = ("0" + now.getDate()).slice(-2);
+                    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+                    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+                    for(i=0;i<res.body.length;i++){
+                        if(res.body[i].date.indexOf(today)!=-1){
+                            if(res.body[i].mood.indexOf('好難過')!=-1)
+                            {
+                                this.$refs.newleaf.classList.add('leafnew')
+                                this.$refs.newleaf.classList.add('leaf'+day)
+                                this.$refs.newleaf.classList.add('verysad_leaf')
+                            }
+                            else if(res.body[i].mood.indexOf('有點糟')!=-1)
+                            {
+                                this.$refs.newleaf.classList.add('leafnew')
+                                this.$refs.newleaf.classList.add('leaf'+day)
+                                this.$refs.newleaf.classList.add('sad_leaf')
+                            }
+                            else if(res.body[i].mood.indexOf('平靜')!=-1)
+                            {
+                                this.$refs.newleaf.classList.add('leafnew')
+                                this.$refs.newleaf.classList.add('leaf'+day)
+                                this.$refs.newleaf.classList.add('neutral_leaf')
+                            }
+                            else if(res.body[i].mood.indexOf('小確幸')!=-1)
+                            {
+                                this.$refs.newleaf.classList.add('leafnew')
+                                this.$refs.newleaf.classList.add('leaf'+day)
+                                this.$refs.newleaf.classList.add('happy_leaf')
+                            }
+                            else 
+                            {
+                                this.$refs.newleaf.classList.add('leafnew')
+                                this.$refs.newleaf.classList.add('leaf'+day)
+                                this.$refs.newleaf.classList.add('veryhappy_leaf')
+                            }
+                        }
+                    }
+                })
+            }
+            
+        }
     },
     created () {
 
@@ -48,7 +119,12 @@ name: 'JuneTree',
             var i;
             var day;
             var day_set = new Set();
-
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+            var todayWater = false;//還沒澆水不能顯示樹葉
+            
 
             
             for(i=0;i<res.body.length;i++){
@@ -58,26 +134,84 @@ name: 'JuneTree',
                     day_set.add(day)
                     //console.log( "5月"+day +"號有寫日記")
                     //console.log(res.body[i].mood)
-                    if(res.body[i].mood.indexOf('好難過')!=-1)
-                    {
-                        this.$refs.leaf[day-1].classList.add('verysad_leaf')
+                    if(res.body[i].date.indexOf(today)!=-1 ){
+                        this.$http
+                        .post("/api/checkWatering", {
+                            id : this.ID,
+                        })
+                        .then((res) => {
+                                    
+                            if(res.body.length>=1){
+                                console.log("顯示今天的樹葉")
+                                this.$http
+                                .post("/api/checkDiaryDate", {
+                                    id : this.ID,
+                                })
+                                .then((res) => {
+                                    var i;
+                                    var day;
+                                    var day_set = new Set();
+                                    var now = new Date();
+                                    var day = ("0" + now.getDate()).slice(-2);
+                                    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+                                    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+                                    for(i=0;i<res.body.length;i++){
+                                        if(res.body[i].date.indexOf(today)!=-1){
+                                            if(res.body[i].mood.indexOf('好難過')!=-1)
+                                            {
+                                                this.$refs.leaf[day-1].classList.add('verysad_leaf')
+                                            }
+                                            else if(res.body[i].mood.indexOf('有點糟')!=-1)
+                                            {
+                                                this.$refs.leaf[day-1].classList.add('sad_leaf')
+                                            }
+                                            else if(res.body[i].mood.indexOf('平靜')!=-1)
+                                            {
+                                                this.$refs.leaf[day-1].classList.add('neutral_leaf')
+                                            }
+                                            else if(res.body[i].mood.indexOf('小確幸')!=-1)
+                                            {
+                                                this.$refs.leaf[day-1].classList.add('happy_leaf')
+                                            }
+                                            else 
+                                            {
+                                                this.$refs.leaf[day-1].classList.add('veryhappy_leaf')
+                                            }
+                                        }
+                                    }
+                                })
+                            }
+                            else{
+                                console.log("今天的樹葉還不可以顯示")
+                                todayWater=true;
+                            }
+                        
+                        });
+                        
                     }
-                    else if(res.body[i].mood.indexOf('有點糟')!=-1)
-                    {
-                        this.$refs.leaf[day-1].classList.add('sad_leaf')
+                    else{
+                        if(res.body[i].mood.indexOf('好難過')!=-1)
+                        {
+                            this.$refs.leaf[day-1].classList.add('verysad_leaf')
+                        }
+                        else if(res.body[i].mood.indexOf('有點糟')!=-1)
+                        {
+                            this.$refs.leaf[day-1].classList.add('sad_leaf')
+                        }
+                        else if(res.body[i].mood.indexOf('平靜')!=-1)
+                        {
+                            this.$refs.leaf[day-1].classList.add('neutral_leaf')
+                        }
+                        else if(res.body[i].mood.indexOf('小確幸')!=-1)
+                        {
+                            this.$refs.leaf[day-1].classList.add('happy_leaf')
+                        }
+                        else 
+                        {
+                            this.$refs.leaf[day-1].classList.add('veryhappy_leaf')
+                        }
                     }
-                    else if(res.body[i].mood.indexOf('平靜')!=-1)
-                    {
-                        this.$refs.leaf[day-1].classList.add('neutral_leaf')
-                    }
-                    else if(res.body[i].mood.indexOf('小確幸')!=-1)
-                    {
-                        this.$refs.leaf[day-1].classList.add('happy_leaf')
-                    }
-                    else 
-                    {
-                        this.$refs.leaf[day-1].classList.add('veryhappy_leaf')
-                    }
+                    
                     
                     
                 }
@@ -86,7 +220,8 @@ name: 'JuneTree',
             if(day_set.size>=10){
                 this.bluebird = true
             }
-            if(day_set.size>=20){
+            if(day_set.size>=20 && todayWater==true){
+                console.log("= =")
                 this.orangebird = true
             }
             
@@ -102,6 +237,109 @@ name: 'JuneTree',
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#watercan {
+  position: absolute;
+  left: 59.5%;
+  top: 45.4%;
+  opacity: 0;
+}
+.watercan {
+  /* animation 參數設定 */
+  animation-name: watercan; /*動畫名稱，需與 keyframe 名稱對應*/
+  animation-duration: 2s; /*動畫持續時間，單位為秒*/
+  animation-delay: 0s; /*動畫延遲開始時間*/
+  animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+  animation-fill-mode: forwards;
+  /*右下角*/
+  transform-origin: right bottom;
+}
+@keyframes watercan {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: rotate(-10deg);
+  }
+  75% {
+    opacity: 1;
+    transform: rotate(-15deg);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#drop1 {
+  position: absolute;
+  left: 53.5%;
+  top: 72.4%;
+  opacity: 0;
+}
+#drop2 {
+  position: absolute;
+  left: 55.5%;
+  top: 78.4%;
+  opacity: 0;
+  transform: rotate(-35deg);
+}
+#drop3 {
+  position: absolute;
+  left: 46.5%;
+  top: 79.4%;
+  opacity: 0;
+  transform: rotate(-15deg) scale(0.8);
+}
+#drop4 {
+  position: absolute;
+  left: 50.5%;
+  top: 86.4%;
+  opacity: 0;
+  transform: rotate(-25deg);
+}
+.drop1 {
+  /* animation 參數設定 */
+  animation-name: drop; /*動畫名稱，需與 keyframe 名稱對應*/
+  animation-duration: 1s; /*動畫持續時間，單位為秒*/
+  animation-delay: 0.4s; /*動畫延遲開始時間*/
+  animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+  animation-fill-mode: forwards;
+}
+.drop2 {
+  /* animation 參數設定 */
+  animation-name: drop; /*動畫名稱，需與 keyframe 名稱對應*/
+  animation-duration: 1s; /*動畫持續時間，單位為秒*/
+  animation-delay: 0.6s; /*動畫延遲開始時間*/
+  animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+  animation-fill-mode: forwards;
+}
+.drop3 {
+  /* animation 參數設定 */
+  animation-name: drop; /*動畫名稱，需與 keyframe 名稱對應*/
+  animation-duration: 1s; /*動畫持續時間，單位為秒*/
+  animation-delay: 0.8s; /*動畫延遲開始時間*/
+  animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+  animation-fill-mode: forwards;
+}
+.drop4 {
+  /* animation 參數設定 */
+  animation-name: drop; /*動畫名稱，需與 keyframe 名稱對應*/
+  animation-duration: 1s; /*動畫持續時間，單位為秒*/
+  animation-delay: 1s; /*動畫延遲開始時間*/
+  animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+  animation-fill-mode: forwards;
+}
+@keyframes drop {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 .orange_bird{
     position: absolute;
     right:-50px;
@@ -603,6 +841,15 @@ name: 'JuneTree',
     color:rgb(0, 0, 0,0);
     position: absolute;
 }
+.leafnew{
+    /*background: url("../yo_0622/tree_leaf_neutral.svg") no-repeat center;*/
+    background-size: 20px auto;
+    width: 30px;
+    height: 30px;
+    
+    color:rgb(0, 0, 0,0);
+    position: absolute;
+}
 .tree{
     position: absolute;
     bottom:50px;
@@ -670,5 +917,399 @@ name: 'JuneTree',
     bottom:35px;
     left:123px;
     
+}
+.leaf1{ 
+    top:230px;
+    left:188px; 
+    
+    
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup1; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+    
+}
+.leaf2{ 
+    top:210px;
+    left:215px; 
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup1; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf3{ 
+    top:235px;
+    left:145px; 
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 1.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf4{ 
+    left:180px; 
+    top:220px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 1.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf5{ 
+    left:188px; 
+    top:190px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf6{ 
+    left:235px; 
+    top:180px;
+
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf7{ 
+    left:255px; 
+    top:212px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup7; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf8{ 
+    left:105px; 
+    top:230px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf9{ 
+    left:68px; 
+    top:235px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: bottom left;
+}
+.leaf10{ 
+    left:50px; 
+    top:219px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf11{ 
+    left:96px; 
+    top:220px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup7; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: top right;
+}
+.leaf12{ 
+    left:117px; 
+    top:178px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf13{ 
+    left:60px; 
+    top:170px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf14{ 
+    left:33px; 
+    top:166px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf15{ 
+    left:78px; 
+    top:177px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf16{ 
+    left:45px; 
+    top:144px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf17{ 
+    left:181px; 
+    top:180px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf18{ 
+    left:160px; 
+    top:187px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 1.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf19{ 
+    left:150px; 
+    top:150px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup7; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf20{ 
+    left:163px; 
+    top:146px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup7; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf21{ 
+    left:190px; 
+    top:138px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup7; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 3.5s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf22{ 
+    left:85px; 
+    top:152px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup7; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf23{ 
+    left:61px; 
+    top:82px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf24{ 
+    left:81px; 
+    top:70px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf25{ 
+    left:48px; 
+    top:100px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf26{ 
+    left:135px; 
+    top:80px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf27{ 
+    left:120px; 
+    top:120px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf28{ 
+    left:166px; 
+    top:96px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup3; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
+}
+.leaf29{ 
+    left:149px; 
+    top:45px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup8; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: left bottom;
+}
+.leaf30{ 
+    left:135px; 
+    top:80px;
+    /* animation 參數設定 */
+    opacity: 0;
+    animation-name: growup7; /*動畫名稱，需與 keyframe 名稱對應*/
+    animation-duration: 2s; /*動畫持續時間，單位為秒*/
+    animation-delay: 2.3s; /*動畫延遲開始時間*/
+    animation-iteration-count: 1; /*動畫次數，infinite 為無限次*/
+    animation-fill-mode: forwards;
+    /*右下角*/
+    transform-origin: right top;
 }
 </style>

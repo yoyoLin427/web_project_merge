@@ -364,4 +364,40 @@ module.exports = {
             
         })
     },
+    checkWatering(req, res, next) {
+       
+        var sql = "SELECT * FROM `watering_yoyo` WHERE ID=? AND day=?";
+        var id = req.body.id
+
+
+        pool.getConnection((err, connection) => {
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+            connection.query(sql, [id,today],(err, result) => {
+                if (err) throw err;
+                res.send(result);
+                connection.release();
+            });
+            
+        })
+    },
+    addWater(req, res, next) {
+       
+        var sql = "INSERT INTO `watering_yoyo` (`day`, `ID`) VALUES (?, ?);";
+        var id = req.body.id
+
+        pool.getConnection((err, connection) => {
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+            connection.query(sql, [today,id],(err, result) => {
+                if (err) throw err;
+                connection.release();
+            });
+            
+        })
+    },
 }
